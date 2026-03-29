@@ -12,7 +12,7 @@ class RemoveCartCubit extends Cubit<RemoveCartState> {
       );
       if (response.isSucces) {
         emit(
-          CartRemoveSuccesState(succesMessage: response.data['message']),
+          CartRemoveSuccesState(succesMessage: response.data['message'] , proudctId: productId),
         );
       }
     } on DioException catch (e) {

@@ -15,9 +15,12 @@ class CartProductCubit extends Cubit<CartProductState> {
       final response = await DioHelper.getData(endPoint: 'client/cart');
       if (response.isSucces) {
         list = CartData.fromjson(response.data).list;
+        final cartData = CartData.fromjson(response.data);
 
         if (!isClosed) {
-          emit(CartProductSuccessState(list: list));
+          emit(
+            CartProductSuccessState(list: list, cartData: cartData),
+          );
         }
       }
     } on DioException catch (e) {

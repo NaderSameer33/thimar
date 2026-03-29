@@ -6,7 +6,8 @@ class CartProductLoadingState extends CartProductState {}
 
 class CartProductSuccessState extends CartProductState {
   final List<CartModel> list;
-  CartProductSuccessState({required this.list});
+  final CartData cartData  ;
+  CartProductSuccessState(  {required this.cartData , required this.list});
 }
 
 class CartProductFailureState extends CartProductState {

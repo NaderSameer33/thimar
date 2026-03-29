@@ -2,7 +2,8 @@ class RemoveCartState {}
 
 class CartRemoveSuccesState extends RemoveCartState {
   final String succesMessage;
-  CartRemoveSuccesState({required this.succesMessage});
+  final int proudctId;
+  CartRemoveSuccesState({required this.proudctId, required this.succesMessage});
 }
 
 class CartRemoveFailureState extends RemoveCartState {

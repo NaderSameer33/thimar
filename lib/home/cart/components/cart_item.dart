@@ -76,22 +76,32 @@ class CartDeleteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 27.h,
-      width: 27.w,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(7.r),
-        color: Colors.red.withValues(alpha: .1),
-      ),
-      child: IconButton(
-        onPressed: () async {
-          context.read<RemoveCartCubit>().removeCartProduct(
-            productId: productId,
-          );
-        },
-        icon: AppImage(
-          image: 'trash.svg',
-          color: Color(0xffFF0000),
+    return BlocListener<RemoveCartCubit, RemoveCartState>(
+      listener: (context, state) {
+        if (state is CartRemoveSuccesState && state.proudctId == productId) {
+          showMsg(state.succesMessage);
+          context.read<CartProductCubit>().getCartProduct();
+        } else if (state is CartRemoveFailureState) {
+          showMsg(state.errorMessage, isError: true);
+        }
+      },
+      child: Container(
+        height: 27.h,
+        width: 27.w,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(7.r),
+          color: Colors.red.withValues(alpha: .1),
+        ),
+        child: IconButton(
+          onPressed: () async {
+            context.read<RemoveCartCubit>().removeCartProduct(
+              productId: productId,
+            );
+          },
+          icon: AppImage(
+            image: 'trash.svg',
+            color: Color(0xffFF0000),
+          ),
         ),
       ),
     );
