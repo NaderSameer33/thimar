@@ -44,6 +44,7 @@ class CartBottomNavBar extends StatelessWidget {
                     onPressed: () async {
                       await context.read<AddCartCubit>().addCartProduct(
                         productId: productModel.id,
+                        amount: count,
                       );
                     },
                     icon: AppImage(image: 'cart.svg'),

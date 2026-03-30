@@ -58,90 +58,85 @@ class _CartViewState extends State<CartView> {
                       widget.cartCount(state.list.length);
                       return state.list.isEmpty
                           ? AppImage(image: 'not_found.json')
-                          : SizedBox(
-                              height: MediaQuery.of(context).size.height * .5,
-                              child: ListView.builder(
-                                itemCount: state.list.length,
-                                itemBuilder: (context, index) {
-                                  return _CartItem(state.list[index]);
-                                },
-                              ),
+                          : Column(
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * .5,
+                                  child: ListView.builder(
+                                    itemCount: state.list.length,
+                                    itemBuilder: (context, index) {
+                                      return _CartItem(state.list[index]);
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 12.h,
+                                ),
+                                _CoponItem(),
+                                SizedBox(
+                                  height: 11.h,
+                                ),
+                                Text(
+                                  r'جميع الأسعار تشمل قيمة الضريبة المضافة 15%',
+                                  style: TextStyle(
+                                    color: Color(0xff4C8613),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15.sp,
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 11.h),
+                                  padding: EdgeInsets.all(13.r),
+                                  height: 111.h,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffF3F8EE),
+                                    borderRadius: BorderRadius.circular(13.r),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      _OrderInfo(
+                                        title: 'إجمالي المنتجات',
+                                        value: '${'mahmoudn'} ر.س',
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      _OrderInfo(
+                                        title: 'الخصم',
+                                        value: '${'mohamed'} ر.س',
+                                      ),
+                                      Divider(
+                                        height: 13,
+                                      ),
+                                      _OrderInfo(
+                                        title: 'المجموع',
+                                        value: '${'ahmed'} ر.س',
+                                        isTotal: true,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                AppButton(
+                                  onTap: () {},
+                                  title: 'الانتقال لإتمام الطلب',
+                                ),
+                              ],
                             );
                     } else if (state is CartProductLoadingState) {
                       return Expanded(
-                        child: CartSkeltonizerView(),
-                      );
-                    }
-                    return SizedBox();
-                  },
-                ),
-                SizedBox(
-                  height: 12.h,
-                ),
-                BlocBuilder<CartProductCubit, CartProductState>(
-                  builder: (context, state) {
-                    if (state is CartProductSuccessState) {
-                      return Expanded(
                         child: Column(
                           children: [
-                            _CoponItem(),
+                            Expanded(
+                              child: CartSkeltonizerView(),
+                            ),
                             SizedBox(
-                              height: 11.h,
+                              height: 50.h,
                             ),
-                            Text(
-                              r'جميع الأسعار تشمل قيمة الضريبة المضافة 15%',
-                              style: TextStyle(
-                                color: Color(0xff4C8613),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15.sp,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(bottom: 11.h),
-                              padding: EdgeInsets.all(13.r),
-                              height: 111.h,
-                              decoration: BoxDecoration(
-                                color: Color(0xffF3F8EE),
-                                borderRadius: BorderRadius.circular(13.r),
-                              ),
-                              child: Column(
-                                children: [
-                                  _OrderInfo(
-                                    title: 'إجمالي المنتجات',
-                                    value:
-                                        '${state.cartData.totalPriceBeforeDiscount} ر.س',
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  _OrderInfo(
-                                    title: 'الخصم',
-                                    value:
-                                        '${state.cartData.totalDiscount} ر.س',
-                                  ),
-                                  Divider(
-                                    height: 13,
-                                  ),
-                                  _OrderInfo(
-                                    title: 'المجموع',
-                                    value:
-                                        '${state.cartData.totalPriceWithVat} ر.س',
-                                    isTotal: true,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Flexible(
-                              child: AppButton(
-                                onTap: () {},
-                                title: 'الانتقال لإتمام الطلب',
-                              ),
-                            ),
+                            CartPriceSkeltonizer(),
                           ],
                         ),
                       );
-                    } else if (state is CartProductLoadingState) {
-                      return CartPriceSkeltonizer();
                     }
                     return SizedBox();
                   },
