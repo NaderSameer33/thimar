@@ -7,19 +7,18 @@ import 'package:thimar/home/cart/model/cart_model.dart';
 class CartProductCubit extends Cubit<CartProductState> {
   CartProductCubit() : super(CartProductState());
 
-  late List<CartModel> list;
-
   Future<void> getCartProduct() async {
     emit(CartProductLoadingState());
     try {
       final response = await DioHelper.getData(endPoint: 'client/cart');
       if (response.isSucces) {
-        list = CartData.fromjson(response.data).list;
         final cartData = CartData.fromjson(response.data);
 
         if (!isClosed) {
           emit(
-            CartProductSuccessState(list: list, cartData: cartData),
+            CartProductSuccessState(
+              cartData: cartData,
+            ),
           );
         }
       }
@@ -28,5 +27,35 @@ class CartProductCubit extends Cubit<CartProductState> {
         CartProductFailureState(errorMessage: e.toString()),
       );
     }
+  }
+
+  void deleteCartProduct({required int id, required CartData cartData}) {
+    final cartList = [...cartData.list];
+
+    cartList.removeWhere((item) => item.id == id);
+    double totalPriceBeforeDicount = cartList.fold(
+      0.0,
+      (sum, item) => sum + (item.amount * item.price),
+    );
+    double totalDiscont = cartList.fold(
+      0.0,
+      (sum, item) => sum + item.discount,
+    );
+    double totalAfterDiscount = totalPriceBeforeDicount - totalDiscont;
+    final vat = totalAfterDiscount * .14;
+    final totalWithVat = totalAfterDiscount + vat;
+
+    final upDataCartData = cartData.copyWith(
+      list: cartList,
+      totalPriceBeforeDiscount: totalPriceBeforeDicount,
+      totalDiscount: totalDiscont,
+      totalPriceWithVat: totalWithVat,
+      vat: vat,
+    );
+    emit(
+      CartProductSuccessState(
+        cartData: upDataCartData,
+      ),
+    );
   }
 }

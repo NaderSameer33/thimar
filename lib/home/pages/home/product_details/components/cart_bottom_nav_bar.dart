@@ -25,7 +25,7 @@ class CartBottomNavBar extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              BlocListener<AddCartCubit, AddCartState>(
+              BlocConsumer<AddCartCubit, AddCartState>(
                 listener: (context, state) {
                   if (state is AddCartSuccessState) {
                     showMsg(state.succesMessage);
@@ -33,23 +33,31 @@ class CartBottomNavBar extends StatelessWidget {
                     showMsg(state.errorMessage, isError: true);
                   }
                 },
-                child: Container(
-                  height: 35.h,
-                  width: 35.w,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: .2),
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: IconButton(
-                    onPressed: () async {
-                      await context.read<AddCartCubit>().addCartProduct(
-                        productId: productModel.id,
-                        amount: count,
-                      );
-                    },
-                    icon: AppImage(image: 'cart.svg'),
-                  ),
-                ),
+                builder: (context, state) {
+                  return Container(
+                    height: 35.h,
+                    width: 35.w,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: .2),
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: IconButton(
+                      onPressed: () async {
+                        await context.read<AddCartCubit>().addCartProduct(
+                          productId: productModel.id,
+                          amount: count,
+                        );
+                      },
+                      icon: state is AddCartLoadingState
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : AppImage(image: 'cart.svg'),
+                    ),
+                  );
+                },
               ),
               Text(
                 'إضافة إلي السلة',

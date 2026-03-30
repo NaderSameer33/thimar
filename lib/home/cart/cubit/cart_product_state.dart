@@ -5,14 +5,13 @@ class CartProductState {}
 class CartProductLoadingState extends CartProductState {}
 
 class CartProductSuccessState extends CartProductState {
-  final List<CartModel> list;
-  final CartData cartData  ;
-  CartProductSuccessState(  {required this.cartData , required this.list});
+  final CartData cartData;
+  CartProductSuccessState({
+    required this.cartData,
+  });
 }
 
 class CartProductFailureState extends CartProductState {
   final String errorMessage;
   CartProductFailureState({required this.errorMessage});
 }
-
-

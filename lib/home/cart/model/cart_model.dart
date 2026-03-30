@@ -13,6 +13,23 @@ class CartData {
   late final String message;
 
   late final List<CartModel> list;
+
+  CartData({
+    required this.list,
+    required this.totalPriceBeforeDiscount,
+    required this.totalDiscount,
+    required this.totalPriceWithVat,
+    required this.deliveryCost,
+    required this.freeDeliveryPrice,
+    required this.vat,
+    required this.isVip,
+    required this.vipDiscountPercentage,
+    required this.minVipPrice,
+    required this.vipMessage,
+    required this.status,
+    required this.message,
+  });
+
   CartData.fromjson(Map<String, dynamic> json) {
     list = List.from(
       json['data'] ?? {},
@@ -41,6 +58,39 @@ class CartData {
     status = json['status'] ?? "";
 
     message = json['message'] ?? "";
+  }
+  CartData copyWith({
+    List<CartModel>? list,
+    double? totalPriceBeforeDiscount,
+    double? totalDiscount,
+    double? totalPriceWithVat,
+    double? deliveryCost,
+    double? freeDeliveryPrice,
+    double? vat,
+    int? isVip,
+    double? vipDiscountPercentage,
+    double? minVipPrice,
+    String? vipMessage,
+    String? status,
+    String? message,
+  }) {
+    return CartData(
+      list: list ?? this.list,
+      totalPriceBeforeDiscount:
+          totalPriceBeforeDiscount ?? this.totalPriceBeforeDiscount,
+      totalDiscount: totalDiscount ?? this.totalDiscount,
+      totalPriceWithVat: totalPriceWithVat ?? this.totalPriceWithVat,
+      deliveryCost: deliveryCost ?? this.deliveryCost,
+      freeDeliveryPrice: freeDeliveryPrice ?? this.freeDeliveryPrice,
+      vat: vat ?? this.vat,
+      isVip: isVip ?? this.isVip,
+      vipDiscountPercentage:
+          vipDiscountPercentage ?? this.vipDiscountPercentage,
+      minVipPrice: minVipPrice ?? this.minVipPrice,
+      vipMessage: vipMessage ?? this.vipMessage,
+      status: status ?? this.status,
+      message: message ?? this.message,
+    );
   }
 }
 

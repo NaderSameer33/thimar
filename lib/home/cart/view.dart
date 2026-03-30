@@ -55,8 +55,8 @@ class _CartViewState extends State<CartView> {
                 BlocBuilder<CartProductCubit, CartProductState>(
                   builder: (context, state) {
                     if (state is CartProductSuccessState) {
-                      widget.cartCount(state.list.length);
-                      return state.list.isEmpty
+                      widget.cartCount(state.cartData.list.length);
+                      return state.cartData.list.isEmpty
                           ? AppImage(image: 'not_found.json')
                           : Column(
                               children: [
@@ -64,9 +64,12 @@ class _CartViewState extends State<CartView> {
                                   height:
                                       MediaQuery.of(context).size.height * .5,
                                   child: ListView.builder(
-                                    itemCount: state.list.length,
+                                    itemCount: state.cartData.list.length,
                                     itemBuilder: (context, index) {
-                                      return _CartItem(state.list[index]);
+                                      return _CartItem(
+                                        state.cartData.list[index],
+                                        state.cartData,
+                                      );
                                     },
                                   ),
                                 ),
@@ -97,21 +100,24 @@ class _CartViewState extends State<CartView> {
                                     children: [
                                       _OrderInfo(
                                         title: 'إجمالي المنتجات',
-                                        value: '${'mahmoudn'} ر.س',
+                                        value:
+                                            '${state.cartData.totalPriceBeforeDiscount} ر.س',
                                       ),
                                       SizedBox(
                                         height: 10.h,
                                       ),
                                       _OrderInfo(
                                         title: 'الخصم',
-                                        value: '${'mohamed'} ر.س',
+                                        value:
+                                            '${state.cartData.totalDiscount} ر.س',
                                       ),
                                       Divider(
                                         height: 13,
                                       ),
                                       _OrderInfo(
-                                        title: 'المجموع',
-                                        value: '${'ahmed'} ر.س',
+                                        title: 'المجموع بعد الضريبه',
+                                        value:
+                                            '${state.cartData.totalPriceWithVat} ر.س',
                                         isTotal: true,
                                       ),
                                     ],

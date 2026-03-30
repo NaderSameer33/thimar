@@ -3,8 +3,10 @@ part of '../view.dart';
 class _CartItem extends StatelessWidget {
   const _CartItem(
     this.cartModel,
+    this.cartData,
   );
   final CartModel cartModel;
+  final CartData cartData;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +61,7 @@ class _CartItem extends StatelessWidget {
           ),
           Spacer(),
           CartDeleteButton(
+            cartData: cartData,
             productId: cartModel.id,
           ),
         ],
@@ -71,8 +74,10 @@ class CartDeleteButton extends StatelessWidget {
   const CartDeleteButton({
     super.key,
     required this.productId,
+    required this.cartData,
   });
   final int productId;
+  final CartData cartData;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +85,10 @@ class CartDeleteButton extends StatelessWidget {
       listener: (context, state) {
         if (state is CartRemoveSuccesState && state.proudctId == productId) {
           showMsg(state.succesMessage);
-          context.read<CartProductCubit>().getCartProduct();
+          context.read<CartProductCubit>().deleteCartProduct(
+            id: productId,
+            cartData: cartData,
+          );
         } else if (state is CartRemoveFailureState) {
           showMsg(state.errorMessage, isError: true);
         }
