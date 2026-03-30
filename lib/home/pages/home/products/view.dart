@@ -159,6 +159,7 @@ class ProductItem extends StatelessWidget {
                 ),
                 Spacer(),
                 BlocConsumer<AddCartCubit, AddCartState>(
+                 
                   listener: (context, state) {
                     if (state is AddCartSuccessState && state.id == model.id) {
                       showMsg(state.succesMessage);

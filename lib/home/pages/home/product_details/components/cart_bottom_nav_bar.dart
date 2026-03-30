@@ -42,8 +42,8 @@ class CartBottomNavBar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.r),
                     ),
                     child: IconButton(
-                      onPressed: () async {
-                        await context.read<AddCartCubit>().addCartProduct(
+                      onPressed: () {
+                        context.read<AddCartCubit>().addCartProduct(
                           productId: productModel.id,
                           amount: count,
                         );

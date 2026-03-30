@@ -13,7 +13,7 @@ class AppInput extends StatefulWidget {
     this.validator,
     this.controller,
     this.isSearch = false,
-    this.isCategories = false,
+    this.isCategories = false,  this.isAccount = false,
   });
   final String? prefixIcon;
   final double? topSpacing, bottomSpacing;
@@ -23,6 +23,7 @@ class AppInput extends StatefulWidget {
   final TextEditingController? controller;
   final bool isSearch;
   final bool isCategories;
+  final bool isAccount;
 
   @override
   State<AppInput> createState() => _AppInputState();
@@ -109,6 +110,7 @@ class _AppInputState extends State<AppInput> {
                         width: 2.w,
                         topSpacing: 10,
                         bottomSpacing: 10,
+                        color: widget.isAccount ? Color(0xff4C8613) : null,
                       )
                     : null,
                 fillColor: widget.isSearch
