@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thimar/auth/login/models/login_model.dart';
+import 'package:thimar/home/pages/account/user_info/models/user_info.dart';
 
 class CacheHelper {
   static late SharedPreferences _sharedPreferences;
@@ -24,7 +25,7 @@ class CacheHelper {
     return _sharedPreferences.getString('phone') ?? '';
   }
 
-  static saveUser(LoginModel model) async {
+  static saveUser(LoginModel model ) async {
     await _sharedPreferences.setString('token', model.token);
 
     await _sharedPreferences.setString('image', model.image);
@@ -33,4 +34,6 @@ class CacheHelper {
 
     await _sharedPreferences.setString('phone', model.phoneNumber);
   }
+  
+  
 }

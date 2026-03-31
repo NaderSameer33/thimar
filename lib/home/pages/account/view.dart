@@ -10,7 +10,7 @@ import 'package:thimar/home/pages/account/contact_us.dart';
 import 'package:thimar/home/pages/account/issues.dart';
 import 'package:thimar/home/pages/account/privacy.dart';
 import 'package:thimar/home/pages/account/question.dart';
-import 'package:thimar/home/pages/account/user_info.dart';
+import 'package:thimar/home/pages/account/user_info/view.dart';
 import 'package:thimar/home/pages/account/wallet.dart';
 part 'components/header.dart';
 part 'components/account_body.dart';

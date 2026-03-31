@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:thimar/core/logic/app_valdator.dart';
 import 'package:thimar/core/logic/cache_helper.dart';
 import 'package:thimar/core/ui/account_header.dart';
 import 'package:thimar/core/ui/app_button.dart';
 import 'package:thimar/core/ui/app_image.dart';
 import 'package:thimar/core/ui/app_input.dart';
+part 'components/user_info_image.dart';
 
 class UserInfoView extends StatelessWidget {
   const UserInfoView({super.key});
@@ -27,15 +31,7 @@ class UserInfoView extends StatelessWidget {
                     SizedBox(
                       height: 30.h,
                     ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(15.r),
-
-                      child: AppImage(
-                        image: CacheHelper.getImage(),
-                        height: 88.h,
-                        width: 83.w,
-                      ),
-                    ),
+                    _UserInfoImage(),
                     SizedBox(
                       height: 3.h,
                     ),
