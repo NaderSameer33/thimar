@@ -29,33 +29,34 @@ class CartProductCubit extends Cubit<CartProductState> {
     }
   }
 
-  void deleteCartProduct({required int id, required CartData cartData}) {
-    final cartList = [...cartData.list];
 
-    cartList.removeWhere((item) => item.id == id);
-    double totalPriceBeforeDicount = cartList.fold(
-      0.0,
-      (sum, item) => sum + (item.amount * item.price),
-    );
-    double totalDiscont = cartList.fold(
-      0.0,
-      (sum, item) => sum + item.discount,
-    );
-    double totalAfterDiscount = totalPriceBeforeDicount - totalDiscont;
-    final vat = totalAfterDiscount * .14;
-    final totalWithVat = totalAfterDiscount + vat;
+void deleteCartProduct({required int id, required CartData cartData}) {
+  final cartList = [...cartData.list];
 
-    final upDataCartData = cartData.copyWith(
-      list: cartList,
-      totalPriceBeforeDiscount: totalPriceBeforeDicount,
-      totalDiscount: totalDiscont,
-      totalPriceWithVat: totalWithVat,
-      vat: vat,
-    );
-    emit(
-      CartProductSuccessState(
-        cartData: upDataCartData,
-      ),
-    );
+  cartList.removeWhere((item) => item.id == id);
+
+  double totalPriceBeforeDicount = 0;
+  double totalDiscont = 0;
+
+  for (var item in cartList) {
+    totalPriceBeforeDicount += item.amount * item.price;
+    totalDiscont += item.amount * item.discount;
   }
+
+  double totalAfterDiscount =
+      (totalPriceBeforeDicount - totalDiscont).clamp(0, double.infinity);
+
+  final vat = totalAfterDiscount * .14;
+  final totalWithVat = totalAfterDiscount + vat;
+
+  final upDataCartData = cartData.copyWith(
+    list: cartList,
+    totalPriceBeforeDiscount: totalPriceBeforeDicount,
+    totalDiscount: totalDiscont,
+    totalPriceWithVat: totalWithVat,
+    vat: vat,
+  );
+
+  emit(CartProductSuccessState(cartData: upDataCartData));
+}
 }

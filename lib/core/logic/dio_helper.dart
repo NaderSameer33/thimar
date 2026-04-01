@@ -47,6 +47,39 @@ class DioHelper {
       );
     }
   }
+  static Future<CustomResponse> putData({
+    required String endPoint,
+    dynamic data,
+  }) async {
+    _dio.options.headers.addAll({
+      "Authorization": "Bearer ${CacheHelper.getToken()}",
+    });
+    try {
+      final response = await _dio.put(endPoint, data: data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return CustomResponse(
+          isSucces: true,
+          succesMessage: response.data['message'],
+          data: response.data,
+        );
+      }
+      return CustomResponse(
+        isSucces: false,
+        exception: response.data['message'],
+      );
+    } on DioException catch (exception) {
+      if (exception.response is Map) {
+        return CustomResponse(
+          isSucces: false,
+          exception: exception.response!.data['message'],
+        );
+      }
+      return CustomResponse(
+        isSucces: false,
+        exception: 'حدث خطا ما يرجي المحاوله لاحقا',
+      );
+    }
+  }
   static Future<CustomResponse> deleteData({
     required String endPoint,
     dynamic data,

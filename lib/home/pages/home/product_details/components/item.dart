@@ -2,11 +2,12 @@ part of '../view.dart';
 
 class _ProductDetailsItme extends StatelessWidget {
   const _ProductDetailsItme({
-    required this.model, required this.productCoount,
+    required this.model,
+    required this.productCoount,
   });
 
   final ProductModel model;
-  final ValueChanged<int> productCoount ; 
+  final ValueChanged<int> productCoount;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +78,9 @@ class _ProductDetailsItme extends StatelessWidget {
                   fontSize: 19.sp,
                 ),
               ),
-              AppAddRemoveItem(productCount:productCoount ,),
+              AppAddRemoveItem(
+                productId: model.id,
+              ),
             ],
           ),
         ],

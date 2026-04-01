@@ -56,7 +56,9 @@ class _CartItem extends StatelessWidget {
                   fontSize: 13.sp,
                 ),
               ),
-              AppAddRemoveItem(productCount: (count) {}),
+              AppAddRemoveItem(
+                productId: cartModel.id,
+              ),
             ],
           ),
           Spacer(),

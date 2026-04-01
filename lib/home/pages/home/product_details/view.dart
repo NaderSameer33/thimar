@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:thimar/home/cart/cubit/up_data_cart_cubit.dart';
 import '../../../../core/logic/helper_methods.dart';
 import '../../../../core/ui/app_add_remove_item.dart';
 import '../../../../core/ui/app_back.dart';
@@ -52,6 +53,9 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
         ),
         BlocProvider(
           create: (context) => AddCartCubit(),
+        ),
+        BlocProvider(
+          create: (context) => UpDataCartCubit(),
         ),
       ],
       child: Scaffold(

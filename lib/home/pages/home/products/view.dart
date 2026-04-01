@@ -159,9 +159,10 @@ class ProductItem extends StatelessWidget {
                 ),
                 Spacer(),
                 BlocConsumer<AddCartCubit, AddCartState>(
-                 
                   listener: (context, state) {
-                    if (state is AddCartSuccessState && state.id == model.id) {
+                    if (state is AddCartSuccessState &&
+                        state.id == model.id &&
+                        !isSimilar) {
                       showMsg(state.succesMessage);
                     } else if (state is AddCartFailureState) {
                       showMsg(state.errorMessage, isError: true);
@@ -183,7 +184,9 @@ class ProductItem extends StatelessWidget {
                           );
                         },
                         icon:
-                            state is AddCartLoadingState && state.id == model.id
+                            state is AddCartLoadingState &&
+                                state.id == model.id &&
+                                !isSimilar
                             ? Center(
                                 child: CircularProgressIndicator(
                                   color: Colors.white,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:thimar/core/logic/helper_methods.dart';
@@ -14,6 +15,7 @@ import 'package:thimar/home/cart/cubit/coupon_cubit.dart';
 import 'package:thimar/home/cart/cubit/coupon_state.dart';
 import 'package:thimar/home/cart/cubit/remove_cart_cubit.dart';
 import 'package:thimar/home/cart/cubit/remove_cart_state.dart';
+import 'package:thimar/home/cart/cubit/up_data_cart_cubit.dart';
 import 'package:thimar/home/cart/model/cart_model.dart';
 part 'components/cart_item.dart';
 part 'components/header.dart';
@@ -41,6 +43,7 @@ class _CartViewState extends State<CartView> {
         ),
         BlocProvider(create: (context) => RemoveCartCubit()),
         BlocProvider(create: (context) => CouponCubit()),
+        BlocProvider(create: (context) => UpDataCartCubit()),
       ],
       child: Scaffold(
         body: SafeArea(
