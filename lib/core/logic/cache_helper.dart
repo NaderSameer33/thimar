@@ -25,15 +25,26 @@ class CacheHelper {
     return _sharedPreferences.getString('phone') ?? '';
   }
 
-  static saveUser(LoginModel model ) async {
-    await _sharedPreferences.setString('token', model.token);
+  static saveUser({LoginModel? model, UserInfoModel? userInfoModel}) async {
+    if (model == null && userInfoModel == null) return;
+    if (userInfoModel != null) {
+      await _sharedPreferences.setString('image', userInfoModel.image);
 
-    await _sharedPreferences.setString('image', model.image);
+      await _sharedPreferences.setString('name', userInfoModel.name);
 
-    await _sharedPreferences.setString('name', model.name);
+      await _sharedPreferences.setString('phone', userInfoModel.phone);
+    }
+    if (model != null) {
+      await _sharedPreferences.setString('token', model.token);
+      await _sharedPreferences.setString('image', model.image);
 
-    await _sharedPreferences.setString('phone', model.phoneNumber);
+      await _sharedPreferences.setString('name', model.name);
+
+      await _sharedPreferences.setString('phone', model.phoneNumber);
+    }
   }
-  
-  
+
+  static Future<void> clear() async {
+    await _sharedPreferences.clear();
+  }
 }

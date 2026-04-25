@@ -10,7 +10,7 @@ class AddCartCubit extends Cubit<AddCartState> {
     required int productId,
     int amount = 1,
   }) async {
-    emit(AddCartLoadingState(id:  productId));
+    emit(AddCartLoadingState(id: productId));
     final formData = FormData.fromMap({
       'product_id': productId,
       'amount': amount,
@@ -22,8 +22,11 @@ class AddCartCubit extends Cubit<AddCartState> {
       );
       if (response.isSucces) {
         final succesMessage = response.data['message'];
-
-        emit(AddCartSuccessState(succesMessage: succesMessage, id: productId));
+        if (!isClosed) {
+          emit(
+            AddCartSuccessState(succesMessage: succesMessage, id: productId),
+          );
+        }
       }
     } on DioException catch (e) {
       emit(AddCartFailureState(errorMessage: e.toString()));

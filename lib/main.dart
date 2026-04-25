@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:thimar/home/view.dart';
-import 'package:thimar/play_with_widget.dart';
+
 import 'package:thimar/splash.dart';
 import 'core/logic/bloc_observer_implmentaion.dart';
 import 'core/logic/cache_helper.dart';
@@ -45,7 +44,7 @@ class Thimar extends StatelessWidget {
           fontFamily: 'Tajawal',
         ),
         debugShowCheckedModeBanner: false,
-        home: HomeView(),
+        home: SplashView(),
       ),
     );
   }

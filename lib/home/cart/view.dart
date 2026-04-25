@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:thimar/core/logic/helper_methods.dart';
@@ -69,6 +68,7 @@ class _CartViewState extends State<CartView> {
                                   child: ListView.builder(
                                     itemCount: state.cartData.list.length,
                                     itemBuilder: (context, index) {
+                                          state.cartData.list[index];
                                       return _CartItem(
                                         state.cartData.list[index],
                                         state.cartData,

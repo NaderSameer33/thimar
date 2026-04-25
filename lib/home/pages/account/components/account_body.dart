@@ -87,7 +87,10 @@ class _AccountBodyState extends State<_AccountBody> {
     ),
     _Model(
       image: '',
-      onTap: () {},
+      onTap: () async {
+        goTo(LoginView());
+        await CacheHelper.clear();
+      },
       title: 'تسجيل الخروج',
     ),
   ];

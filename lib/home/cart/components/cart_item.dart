@@ -87,10 +87,7 @@ class CartDeleteButton extends StatelessWidget {
       listener: (context, state) {
         if (state is CartRemoveSuccesState && state.proudctId == productId) {
           showMsg(state.succesMessage);
-          context.read<CartProductCubit>().deleteCartProduct(
-            id: productId,
-            cartData: cartData,
-          );
+          BlocProvider.of<CartProductCubit>(context).getCartProduct() ; 
         } else if (state is CartRemoveFailureState) {
           showMsg(state.errorMessage, isError: true);
         }

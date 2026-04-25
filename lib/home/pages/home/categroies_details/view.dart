@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:thimar/core/ui/product_skeleton_view.dart';
+import 'package:thimar/home/cart/cubit/add_cart_cubit.dart';
 import '../../../../core/ui/app_back.dart';
 import '../../../../core/ui/app_image.dart';
 import '../../../../core/ui/app_input.dart';
@@ -17,9 +18,17 @@ class CategoriesDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          CategriesDetailsCubit()..getCategoriesDetails(categoryId: model.id),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              CategriesDetailsCubit()
+                ..getCategoriesDetails(categoryId: model.id),
+                
+        ),
+      BlocProvider(create: (context)=> AddCartCubit(),), 
+        
+      ],
       child: Scaffold(
         body: SafeArea(
           child: Column(
@@ -52,7 +61,7 @@ class CategoriesDetailsView extends StatelessWidget {
               SizedBox(
                 height: 20.h,
               ),
-              CategoresDetailsBody(),
+              Expanded(child: CategoresDetailsBody()),
             ],
           ),
         ),
@@ -93,11 +102,9 @@ class CategoresDetailsBody extends StatelessWidget {
                     ),
                   ],
                 )
-              : Expanded(
-                  child: ProductView(
-                    isScrolle: true,
-                    list: state.list,
-                  ),
+              : ProductView(
+                  isScrolle: true,
+                  list: state.list,
                 );
         }
         return SizedBox();

@@ -30,7 +30,7 @@ class LoginCubit extends Cubit<LoginState> {
       );
 
       final model = LoginData.fromJson(response.data).loginModel;
-      CacheHelper.saveUser(model);
+      CacheHelper.saveUser(model: model);
 
       emit(
         LoginSuccessState(
