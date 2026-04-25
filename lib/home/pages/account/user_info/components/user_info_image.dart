@@ -1,21 +1,33 @@
 part of '../view.dart';
 
 class _UserInfoImage extends StatefulWidget {
-  const _UserInfoImage();
+  const _UserInfoImage({required this.image});
+  final ValueChanged<String> image;
 
   @override
   State<_UserInfoImage> createState() => _UserInfoImageState();
 }
 
 class _UserInfoImageState extends State<_UserInfoImage> {
-  XFile? image;
+  XFile? imageFile;
 
   Future<void> pickImage() async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      this.image = image;
-    });
+    try {
+      final picker = ImagePicker();
+      final pickedImage = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+      );
+
+      if (pickedImage != null) {
+        setState(() {
+          imageFile = pickedImage;
+        });
+        widget.image(pickedImage.path);
+      }
+    } catch (e) {
+      print('Error picking image: $e');
+    }
   }
 
   @override
@@ -27,18 +39,18 @@ class _UserInfoImageState extends State<_UserInfoImage> {
           onTap: pickImage,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15.r),
-
-            child: image == null
+            child: imageFile == null
                 ? AppImage(
                     image: CacheHelper.getImage(),
                     height: 88.h,
                     width: 83.w,
+                    fit: BoxFit.cover,
                   )
                 : Image.file(
-                    File(image!.path),
+                    File(imageFile!.path),
                     height: 88.h,
                     width: 83.w,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
           ),
         ),

@@ -8,92 +8,110 @@ class _AccountBody extends StatefulWidget {
 }
 
 class _AccountBodyState extends State<_AccountBody> {
-  final list = [
-    _Model(
-      image: 'user.png',
-      onTap: () => goTo(
-        UserInfoView(),
+  late List<_Model> list;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeList();
+  }
+
+  void _initializeList() {
+    list = [
+      _Model(
+        image: 'user.png',
+        onTap: () async {
+          // الذهاب إلى صفحة التعديل والتحديث عند الرجوع
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const UserInfoView()),
+          );
+          // تحديث البيانات بعد الرجوع
+          if (mounted) {
+            context.read<UserInfoCubit>().getUserInfo();
+          }
+        },
+        title: 'البيانات الشخصية',
       ),
-      title: 'البيانات الشخصية',
-    ),
-    _Model(
-      image: 'wallet.png',
-      onTap: () => goTo(
-        WalletView(),
+      _Model(
+        image: 'wallet.png',
+        onTap: () => goTo(
+          WalletView(),
+        ),
+        title: 'المحفظة',
       ),
-      title: 'المحفظة',
-    ),
-    _Model(
-      image: 'location.png',
-      onTap: () => goTo(
-        AddressView(),
+      _Model(
+        image: 'location.png',
+        onTap: () => goTo(
+          AddressView(),
+        ),
+        title: 'العناوين',
       ),
-      title: 'العناوين',
-    ),
-    _Model(
-      image: 'question.png',
-      onTap: () => goTo(
-        QuestionView(),
+      _Model(
+        image: 'question.png',
+        onTap: () => goTo(
+          QuestionView(),
+        ),
+        title: 'أسئلة متكررة',
       ),
-      title: 'أسئلة متكررة',
-    ),
-    _Model(
-      image: 'privacy.png',
-      onTap: () => goTo(
-        PrivacyView(),
+      _Model(
+        image: 'privacy.png',
+        onTap: () => goTo(
+          PrivacyView(),
+        ),
+        title: 'سياسة الخصوصية',
       ),
-      title: 'سياسة الخصوصية',
-    ),
-    _Model(
-      image: 'calling.png',
-      onTap: () => goTo(
-        ContactUsView(),
+      _Model(
+        image: 'calling.png',
+        onTap: () => goTo(
+          ContactUsView(),
+        ),
+        title: 'تواصل معنا',
       ),
-      title: 'تواصل معنا',
-    ),
-    _Model(
-      image: 'issues.png',
-      onTap: () => goTo(
-        IssuesView(),
+      _Model(
+        image: 'issues.png',
+        onTap: () => goTo(
+          IssuesView(),
+        ),
+        title: 'الشكاوي والأقتراحات',
       ),
-      title: 'الشكاوي والأقتراحات',
-    ),
-    _Model(
-      image: 'share_app.png',
-      onTap: () {},
-      title: 'مشاركة التطبيق',
-    ),
-    _Model(
-      image: 'about_us.png',
-      onTap: () => goTo(
-        AboutUsView(),
+      _Model(
+        image: 'share_app.png',
+        onTap: () {},
+        title: 'مشاركة التطبيق',
       ),
-      title: 'عن التطبيق',
-    ),
-    _Model(
-      image: 'localization.png',
-      onTap: () {},
-      title: 'تغيير اللغة',
-    ),
-    _Model(
-      image: 'term.png',
-      onTap: () {},
-      title: 'الشروط والأحكام',
-    ),
-    _Model(
-      image: 'rating.png',
-      onTap: () {},
-      title: 'تقييم التطبيق',
-    ),
-    _Model(
-      image: '',
-      onTap: () async {
-        goTo(LoginView());
-        await CacheHelper.clear();
-      },
-      title: 'تسجيل الخروج',
-    ),
-  ];
+      _Model(
+        image: 'about_us.png',
+        onTap: () => goTo(
+          AboutUsView(),
+        ),
+        title: 'عن التطبيق',
+      ),
+      _Model(
+        image: 'localization.png',
+        onTap: () {},
+        title: 'تغيير اللغة',
+      ),
+      _Model(
+        image: 'term.png',
+        onTap: () {},
+        title: 'الشروط والأحكام',
+      ),
+      _Model(
+        image: 'rating.png',
+        onTap: () {},
+        title: 'تقييم التطبيق',
+      ),
+      _Model(
+        image: '',
+        onTap: () async {
+          goTo(LoginView());
+          await CacheHelper.clear();
+        },
+        title: 'تسجيل الخروج',
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +159,7 @@ class _AccountBodyState extends State<_AccountBody> {
 
 class _Model {
   final String title, image;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
-  _Model({required this.onTap, required this.title, required this.image});
+  _Model({this.onTap, required this.title, required this.image});
 }

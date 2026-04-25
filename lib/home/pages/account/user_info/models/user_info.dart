@@ -12,9 +12,19 @@ class UserInfoModel {
 
   UserInfoModel.fromJson(Map<String, dynamic> json) {
     id = json['id'] ?? 0;
-    name = json['fullname'] ?? '';
-    image = json['image'];
+    name = json['fullname'] ?? json['name'] ?? '';
+    image = json['image'] ?? '';
     city = json['city'] ?? '';
     phone = json['phone'] ?? '';
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'fullname': name,
+      'image': image,
+      'city': city,
+      'phone': phone,
+    };
   }
 }
