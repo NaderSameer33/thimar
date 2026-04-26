@@ -3,20 +3,81 @@ part of '../view.dart';
 class _ProductsView extends StatelessWidget {
   const _ProductsView();
 
+  /// Converts a [SearchModel] to a [ProductModel] so we can reuse [ProductItem].
+  ProductModel _toProductModel(SearchModel s) {
+    return ProductModel.fromJson({
+      'is_favorite': s.isFavourite,
+      'title': s.title,
+      'id': s.id,
+      'category_id': s.categoryId,
+      'description': s.description,
+      'main_image': s.image,
+      'price_before_discount': s.priceBeforeDiscount,
+      'price': s.price,
+      'amount': s.amount,
+      // SearchModel already stored discount*100; undo it so ProductModel.fromJson
+      // can re-apply *100 and arrive at the correct percentage.
+      'discount': s.discount / 100,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProductCubit, ProductState>(
-      builder: (context, state) {
-        if (state is ProdcutLoadingState) {
+    return BlocBuilder<SearchCubit, SearchState>(
+      builder: (context, searchState) {
+        // ── Active search ──────────────────────────────────────────────
+        if (searchState is SearchLoadingState) {
           return ProductSkeletonView();
-        } else if (state is ProdcutSuccessState) {
-          return ProductView(list: state.list);
         }
-        return SizedBox();
+
+        if (searchState is SearchSuccessState) {
+          if (searchState.list.isEmpty) {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 48.h),
+              child: Center(
+                child: Text(
+                  'لا توجد نتائج مطابقة',
+                  style: TextStyle(
+                    color: Color(0xff808080),
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ),
+            );
+          }
+          final products = searchState.list.map(_toProductModel).toList();
+          return ProductView(list: products);
+        }
+
+        if (searchState is SearchFailureState) {
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 48.h),
+            child: Center(
+              child: Text(
+                searchState.errorMessage,
+                style: TextStyle(color: Colors.red, fontSize: 13.sp),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+
+        // ── SearchInitial → show normal products ───────────────────────
+        return BlocBuilder<ProductCubit, ProductState>(
+          builder: (context, state) {
+            if (state is ProdcutLoadingState) {
+              return ProductSkeletonView();
+            } else if (state is ProdcutSuccessState) {
+              return ProductView(list: state.list);
+            }
+            return SizedBox();
+          },
+        );
       },
     );
   }
 }
+
 
 class ProductView extends StatelessWidget {
   const ProductView({super.key, required this.list, this.isScrolle = false});

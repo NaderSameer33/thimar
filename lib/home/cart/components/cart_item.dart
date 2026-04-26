@@ -58,6 +58,13 @@ class _CartItem extends StatelessWidget {
               ),
               AppAddRemoveItem(
                 productId: cartModel.id,
+                initialCount: cartModel.amount,
+                onChanged: (newAmount) {
+                  context.read<UpDataCartCubit>().updateCart(
+                        id: cartModel.id,
+                        amount: newAmount,
+                      );
+                },
               ),
             ],
           ),

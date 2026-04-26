@@ -23,28 +23,32 @@ class LoginCubit extends Cubit<LoginState> {
       'type': 'ios',
       'user_type': 'client',
     });
-    try {
-      final response = await DioHelper.sendData(
-        endPoint: 'login',
-        data: formData,
-      );
 
+    final response = await DioHelper.sendData(
+      endPoint: 'login',
+      data: formData,
+    );
+
+    if (response.isSucces) {
       final model = LoginData.fromJson(response.data).loginModel;
       CacheHelper.saveUser(model: model);
-
       emit(
         LoginSuccessState(
           succesMessage: response.succesMessage ?? 'تم تسجيل الدخول بنجاح',
         ),
       );
-    } on DioException catch (exception) {
+    } else {
       emit(
         LoginFailureState(
-          errorMessage:
-              exception.response?.data['message'] ??
-              'حدث خطا ما يرجي المحاوله لاحقا',
+          errorMessage: response.exception ?? 'حدث خطا ما يرجي المحاوله لاحقا',
         ),
       );
     }
+  }
+  @override
+  Future<void> close() {
+    phoneController.dispose();
+    passwordController.dispose();
+    return super.close();
   }
 }

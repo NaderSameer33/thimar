@@ -19,13 +19,11 @@ class EditUserInfoCubit extends Cubit<EditUserInfoState> {
     try {
       emit(EditInfoLoadingState());
 
-      // التحقق من الصورة
       if (imagePath.isEmpty) {
         emit(EditInfoFailureState(errorMessage: 'الرجاء اختيار صورة'));
         return;
       }
 
-      // التحقق من تطابق كلمات المرور
       if (password != confirmPassword) {
         emit(EditInfoFailureState(errorMessage: 'كلمات المرور غير متطابقة'));
         return;
@@ -39,13 +37,10 @@ class EditUserInfoCubit extends Cubit<EditUserInfoState> {
         'password_confirmation': confirmPassword,
       });
 
-      // التحقق من ما إذا كان imagePath هو الصورة الحالية أو مسار ملف جديد
       if (imagePath != 'KEEP_CURRENT_IMAGE') {
-        // إذا كان مسار ملف جديد، نضيفه كـ multipart
         final image = await MultipartFile.fromFile(imagePath);
         formData.files.add(MapEntry('image', image));
       }
-      // إذا كان 'KEEP_CURRENT_IMAGE'، لا نضيف صورة (الـ server سيحتفظ بالصورة الحالية)
 
       final respone = await DioHelper.sendData(
         endPoint: 'client/profile',

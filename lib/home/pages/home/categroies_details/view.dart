@@ -24,10 +24,8 @@ class CategoriesDetailsView extends StatelessWidget {
           create: (context) =>
               CategriesDetailsCubit()
                 ..getCategoriesDetails(categoryId: model.id),
-                
         ),
-      BlocProvider(create: (context)=> AddCartCubit(),), 
-        
+        BlocProvider(create: (context) => AddCartCubit()),
       ],
       child: Scaffold(
         body: SafeArea(
@@ -49,18 +47,9 @@ class CategoriesDetailsView extends StatelessWidget {
                   Spacer(),
                 ],
               ),
-              SizedBox(
-                height: 20.h,
-              ),
-              AppInput(
-                hintText: 'ابحث عن ماتريد؟',
-                isSearch: true,
-                prefixIcon: 'search.svg',
-                isCategories: true,
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
+              SizedBox(height: 20.h),
+              _CategorySearchInput(categoryId: model.id),
+              SizedBox(height: 20.h),
               Expanded(child: CategoresDetailsBody()),
             ],
           ),
@@ -70,10 +59,44 @@ class CategoriesDetailsView extends StatelessWidget {
   }
 }
 
+/// A stateful search field that debounces through [CategriesDetailsCubit].
+class _CategorySearchInput extends StatefulWidget {
+  const _CategorySearchInput({required this.categoryId});
+  final int categoryId;
+
+  @override
+  State<_CategorySearchInput> createState() => _CategorySearchInputState();
+}
+
+class _CategorySearchInputState extends State<_CategorySearchInput> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppInput(
+      controller: _controller,
+      hintText: 'ابحث عن ماتريد؟',
+      isSearch: true,
+      prefixIcon: 'search.svg',
+      isCategories: true,
+      onChanged: (value) {
+        context.read<CategriesDetailsCubit>().onSearchChanged(
+              categoryId: widget.categoryId,
+              keyword: value,
+            );
+      },
+    );
+  }
+}
+
 class CategoresDetailsBody extends StatelessWidget {
-  const CategoresDetailsBody({
-    super.key,
-  });
+  const CategoresDetailsBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -82,16 +105,23 @@ class CategoresDetailsBody extends StatelessWidget {
         if (state is CategoriesDetailsLoadingState) {
           return Expanded(child: ProductSkeletonView());
         }
+
+        if (state is CategoriesDetailsFailureState) {
+          return Center(
+            child: Text(
+              state.errorMessage,
+              style: TextStyle(color: Colors.red, fontSize: 13.sp),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
+
         if (state is CategoriesDetailsSuccessState) {
           return state.list.isEmpty
               ? Column(
                   children: [
-                    AppImage(
-                      image: 'not_found.json',
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
+                    AppImage(image: 'not_found.json'),
+                    SizedBox(height: 10.h),
                     Text(
                       'لا يوجد بيانات حاليا',
                       style: TextStyle(
@@ -107,8 +137,10 @@ class CategoresDetailsBody extends StatelessWidget {
                   list: state.list,
                 );
         }
+
         return SizedBox();
       },
     );
   }
 }
+

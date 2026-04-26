@@ -80,6 +80,7 @@ class _ProductDetailsItme extends StatelessWidget {
               ),
               AppAddRemoveItem(
                 productId: model.id,
+                onChanged: productCoount,
               ),
             ],
           ),

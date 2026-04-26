@@ -15,6 +15,7 @@ import 'package:thimar/home/cart/cubit/coupon_state.dart';
 import 'package:thimar/home/cart/cubit/remove_cart_cubit.dart';
 import 'package:thimar/home/cart/cubit/remove_cart_state.dart';
 import 'package:thimar/home/cart/cubit/up_data_cart_cubit.dart';
+import 'package:thimar/home/cart/cubit/up_data_cart_state.dart';
 import 'package:thimar/home/cart/model/cart_model.dart';
 part 'components/cart_item.dart';
 part 'components/header.dart';
@@ -54,28 +55,37 @@ class _CartViewState extends State<CartView> {
                 SizedBox(
                   height: 24.h,
                 ),
-                BlocBuilder<CartProductCubit, CartProductState>(
-                  builder: (context, state) {
-                    if (state is CartProductSuccessState) {
-                      widget.cartCount(state.cartData.list.length);
-                      return state.cartData.list.isEmpty
-                          ? AppImage(image: 'not_found.json')
-                          : Column(
-                              children: [
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * .5,
-                                  child: ListView.builder(
-                                    itemCount: state.cartData.list.length,
-                                    itemBuilder: (context, index) {
-                                          state.cartData.list[index];
-                                      return _CartItem(
-                                        state.cartData.list[index],
-                                        state.cartData,
-                                      );
-                                    },
+                BlocListener<UpDataCartCubit, UpDataCartState>(
+                  listener: (context, updateState) {
+                    if (updateState is UpDataCartSuccessState) {
+                      showMsg(updateState.succesMessage);
+                      context.read<CartProductCubit>().getCartProduct();
+                    } else if (updateState is UpDataCartFailureState) {
+                      showMsg(updateState.errorMessage, isError: true);
+                    }
+                
+                  },
+                  child: BlocBuilder<CartProductCubit, CartProductState>(
+                    builder: (context, state) {
+                      if (state is CartProductSuccessState) {
+                        widget.cartCount(state.cartData.list.length);
+                        return state.cartData.list.isEmpty
+                            ? AppImage(image: 'not_found.json')
+                            : Column(
+                                children: [
+                                  SizedBox(
+                                    height:
+                                        MediaQuery.of(context).size.height * .5,
+                                    child: ListView.builder(
+                                      itemCount: state.cartData.list.length,
+                                      itemBuilder: (context, index) {
+                                        return _CartItem(
+                                          state.cartData.list[index],
+                                          state.cartData,
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
                                 SizedBox(
                                   height: 12.h,
                                 ),
@@ -150,6 +160,7 @@ class _CartViewState extends State<CartView> {
                     return SizedBox();
                   },
                 ),
+                ), 
               ],
             ),
           ),

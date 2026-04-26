@@ -8,6 +8,8 @@ import 'package:thimar/core/ui/slider_skeletonizer_item.dart';
 import 'package:thimar/home/cart/cubit/add_cart_cubit.dart';
 import 'package:thimar/home/cart/cubit/add_cart_state.dart';
 import 'package:thimar/home/cart/view.dart';
+import 'package:thimar/home/pages/home/search/cubit/search_cubit.dart';
+import 'package:thimar/home/pages/home/search/cubit/search_state.dart';
 import 'package:thimar/home/pages/home/search/model/search_model.dart';
 import 'package:thimar/home/pages/home/search/search_home_input.dart';
 import '../../../core/logic/helper_methods.dart';
@@ -45,6 +47,7 @@ class _HomePageState extends State<HomePage> {
         BlocProvider(create: (context) => CategoriesCubit()..getCategories()),
         BlocProvider(create: (context) => ProductCubit()..getProuct()),
         BlocProvider(create: (context) => AddCartCubit()),
+        BlocProvider(create: (context) => SearchCubit()),
       ],
       child: Scaffold(
         body: SafeArea(

@@ -12,16 +12,16 @@ import '../../core/ui/app_login_or_signup.dart';
 import '../../core/ui/app_resend_code.dart';
 import '../../core/ui/app_verfiy_code.dart';
 
-class OtpVeiw extends StatefulWidget {
-  const OtpVeiw({super.key, required this.phoneNumber, this.isRegister = true});
+class OtpView extends StatefulWidget {
+  const OtpView({super.key, required this.phoneNumber, this.isRegister = true});
   final String phoneNumber;
   final bool isRegister;
 
   @override
-  State<OtpVeiw> createState() => _OtpVeiwState();
+  State<OtpView> createState() => _OtpViewState();
 }
 
-class _OtpVeiwState extends State<OtpVeiw> {
+class _OtpViewState extends State<OtpView> {
   String? code;
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _OtpVeiwState extends State<OtpVeiw> {
                       bottomSpacing: 16.h,
                     ),
                     Text(
-                      'نسيت كلمة المرور',
+                      widget.isRegister ? 'تفعيل الحساب' : 'نسيت كلمة المرور',
                       style: TextStyle(
                         color: Color(0xff4C8613),
                         fontSize: 16.sp,
@@ -99,6 +99,7 @@ class _OtpVeiwState extends State<OtpVeiw> {
                                     code: code!,
                                   ),
                             canPop: false,
+                            delayedSeconds: 1,
                           );
                         } else if (state is OtpFailureState) {
                           showMsg(state.failureMessage, isError: true);

@@ -14,6 +14,7 @@ class AppInput extends StatefulWidget {
     this.controller,
     this.isSearch = false,
     this.isCategories = false,  this.isAccount = false,
+    this.onChanged,
   });
   final String? prefixIcon;
   final double? topSpacing, bottomSpacing;
@@ -24,6 +25,7 @@ class AppInput extends StatefulWidget {
   final bool isSearch;
   final bool isCategories;
   final bool isAccount;
+  final ValueChanged<String>? onChanged;
 
   @override
   State<AppInput> createState() => _AppInputState();
@@ -75,55 +77,62 @@ class _AppInputState extends State<AppInput> {
             width: 10,
           ),
 
-          Expanded(
-            child: TextFormField(
-              controller: widget.controller,
-              validator: widget.validator,
-              decoration: InputDecoration(
-                errorStyle: TextStyle(
-                  color: Color(0xffF40000).withValues(alpha: .7),
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.bold,
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: Expanded(
+              child: TextFormField(
+                controller: widget.controller,
+                validator: widget.validator,
+                onChanged: widget.onChanged,
+                textDirection: TextDirection.rtl,
+                textAlign: TextAlign.right,
+                decoration: InputDecoration(
+                  hintTextDirection: TextDirection.rtl,
+                  errorStyle: TextStyle(
+                    color: Color(0xffF40000).withValues(alpha: .7),
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  errorBorder: buildBorder(isError: true),
+                  hintText: widget.hintText,
+                  hintStyle: TextStyle(
+                    color: Color(0xffB1B1B1),
+                    fontSize: 15.sp,
+                  ),
+                  suffixIcon: widget.isCategories
+                      ? Container(
+                          margin: EdgeInsets.only(left: 4.r),
+                          height: 30.h,
+                          width: 30.w,
+                          decoration: BoxDecoration(
+                            color: Color(0xff4C8613),
+                            borderRadius: BorderRadius.circular(11),
+                          ),
+                          child: AppImage(image: 'setting.svg'),
+                        )
+                      : null,
+                  prefixIcon: widget.prefixIcon != null
+                      ? AppImage(
+                          image: widget.prefixIcon!,
+                          height: 2.h,
+                          width: 2.w,
+                          topSpacing: 10,
+                          bottomSpacing: 10,
+                          color: widget.isAccount ? Color(0xff4C8613) : null,
+                        )
+                      : null,
+                  fillColor: widget.isSearch
+                      ? Colors.blueGrey[50]
+                      : Color(0xffFFFFFF),
+                  filled: true,
+                  border: buildBorder(),
+                  enabledBorder: buildBorder(),
+                  focusedBorder: buildBorder(),
                 ),
-                errorBorder: buildBorder(isError: true),
-                hintText: widget.hintText,
-                hintStyle: TextStyle(
-                  color: Color(0xffB1B1B1),
-                  fontSize: 15.sp,
-                ),
-                suffixIcon: widget.isCategories
-                    ? Container(
-                        margin: EdgeInsets.only(left: 4.r),
-                        height: 30.h,
-                        width: 30.w,
-                        decoration: BoxDecoration(
-                          color: Color(0xff4C8613),
-                          borderRadius: BorderRadius.circular(11),
-                        ),
-                        child: AppImage(image: 'setting.svg'),
-                      )
-                    : null,
-                prefixIcon: widget.prefixIcon != null
-                    ? AppImage(
-                        image: widget.prefixIcon!,
-                        height: 2.h,
-                        width: 2.w,
-                        topSpacing: 10,
-                        bottomSpacing: 10,
-                        color: widget.isAccount ? Color(0xff4C8613) : null,
-                      )
-                    : null,
-                fillColor: widget.isSearch
-                    ? Colors.blueGrey[50]
-                    : Color(0xffFFFFFF),
-                filled: true,
-                border: buildBorder(),
-                enabledBorder: buildBorder(),
-                focusedBorder: buildBorder(),
               ),
             ),
           ),
-        ],
+        ], 
       ),
     );
   }

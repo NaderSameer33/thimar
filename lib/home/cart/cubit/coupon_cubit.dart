@@ -10,16 +10,17 @@ class CouponCubit extends Cubit<CouponState> {
     emit(CouponLoadingState());
     final formData = FormData.fromMap({'code': couponCode});
 
-    try {
-      final response = await DioHelper.sendData(
-        endPoint: 'client/cart/apply_coupon',
-        data: formData,
-      );
-      if (!isClosed) {
-        emit(CouponSuccessState(succesMessage: response.succesMessage ?? ''));
-      }
-    } on DioException catch (e) {
-      emit(CouponFailureState(errorMessage: e.response!.data['message']));
+    final response = await DioHelper.sendData(
+      endPoint: 'client/cart/apply_coupon',
+      data: formData,
+    );
+
+    if (isClosed) return;
+
+    if (response.isSucces) {
+      emit(CouponSuccessState(succesMessage: response.succesMessage ?? 'تم تطبيق الكوبون بنجاح'));
+    } else {
+      emit(CouponFailureState(errorMessage: response.exception ?? 'الكوبون غير صالح'));
     }
   }
 }

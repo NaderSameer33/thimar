@@ -79,7 +79,7 @@ class _ForgetPasswrodViewState extends State<ForgetPasswrodView> {
                           if (state is ForgetpassSuccessState) {
                             showMsg(state.succesMessage);
                             goTo(
-                              OtpVeiw(
+                              OtpView(
                                 isRegister: false,
                                 phoneNumber: cubit.phoneController.text.trim(),
                               ),

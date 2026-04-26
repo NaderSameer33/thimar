@@ -6,14 +6,35 @@ class AppAddRemoveItem extends StatefulWidget {
   const AppAddRemoveItem({
     super.key,
     required this.productId,
+    this.initialCount = 1,
+    this.onChanged,
   });
   final int productId;
+  final int initialCount;
+  final ValueChanged<int>? onChanged;
+
   @override
   State<AppAddRemoveItem> createState() => _AppAddRemoveItemState();
 }
 
 class _AppAddRemoveItemState extends State<AppAddRemoveItem> {
-  int count = 1;
+  late int count;
+
+  @override
+  void initState() {
+    super.initState();
+    count = widget.initialCount;
+  }
+
+  void _updateCount(int newCount) {
+    setState(() {
+      count = newCount;
+    });
+    if (widget.onChanged != null) {
+      widget.onChanged!(count);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,9 +56,7 @@ class _AppAddRemoveItemState extends State<AppAddRemoveItem> {
               ),
             ),
             onPressed: () {
-              setState(() {
-                count++;
-              });
+              _updateCount(count + 1);
             },
             icon: AppImage(
               image: 'add.svg',
@@ -62,9 +81,7 @@ class _AppAddRemoveItemState extends State<AppAddRemoveItem> {
             ),
             onPressed: () {
               if (count > 1) {
-                setState(() {
-                  count--;
-                });
+                _updateCount(count - 1);
               }
             },
             icon: AppImage(
@@ -76,3 +93,4 @@ class _AppAddRemoveItemState extends State<AppAddRemoveItem> {
     );
   }
 }
+

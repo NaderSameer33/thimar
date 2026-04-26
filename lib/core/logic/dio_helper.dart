@@ -11,6 +11,7 @@ class DioHelper {
       baseUrl: 'https://thimar.amr.aait-d.com/api/',
       headers: {
         'Accept-Language': 'ar',
+        'Accept': 'application/json',
       },
     ),
   );
@@ -35,18 +36,13 @@ class DioHelper {
         exception: response.data['message'],
       );
     } on DioException catch (exception) {
-      if (exception.response is Map) {
-        return CustomResponse(
-          isSucces: false,
-          exception: exception.response!.data['message'],
-        );
-      }
       return CustomResponse(
         isSucces: false,
-        exception: 'حدث خطا ما يرجي المحاوله لاحقا',
+        exception: _extractErrorMessage(exception),
       );
     }
   }
+
   static Future<CustomResponse> putData({
     required String endPoint,
     dynamic data,
@@ -68,18 +64,13 @@ class DioHelper {
         exception: response.data['message'],
       );
     } on DioException catch (exception) {
-      if (exception.response is Map) {
-        return CustomResponse(
-          isSucces: false,
-          exception: exception.response!.data['message'],
-        );
-      }
       return CustomResponse(
         isSucces: false,
-        exception: 'حدث خطا ما يرجي المحاوله لاحقا',
+        exception: _extractErrorMessage(exception),
       );
     }
   }
+
   static Future<CustomResponse> deleteData({
     required String endPoint,
     dynamic data,
@@ -101,18 +92,13 @@ class DioHelper {
         exception: response.data['message'],
       );
     } on DioException catch (exception) {
-      if (exception.response is Map) {
-        return CustomResponse(
-          isSucces: false,
-          exception: exception.response!.data['message'],
-        );
-      }
       return CustomResponse(
         isSucces: false,
-        exception: 'حدث خطا ما يرجي المحاوله لاحقا',
+        exception: _extractErrorMessage(exception),
       );
     }
   }
+
 
   static Future<CustomResponse> getData({
     required String endPoint,
@@ -140,17 +126,29 @@ class DioHelper {
         exception: response.data['message'],
       );
     } on DioException catch (exception) {
-      if (exception.response is Map) {
-        return CustomResponse(
-          isSucces: false,
-          exception: exception.response!.data['message'],
-        );
-      }
       return CustomResponse(
         isSucces: false,
-        exception: 'حدث خطا ما يرجي المحاوله لاحقا',
+        exception: _extractErrorMessage(exception),
       );
     }
+  }
+
+  static String _extractErrorMessage(DioException exception) {
+    if (exception.response?.data is Map) {
+      final data = exception.response!.data;
+      if (data['errors'] is Map) {
+        final Map errors = data['errors'];
+        if (errors.isNotEmpty) {
+          final firstError = errors.values.first;
+          if (firstError is List && firstError.isNotEmpty) {
+            return firstError.first.toString();
+          }
+          return firstError.toString();
+        }
+      }
+      return data['message'] ?? 'بيانات غير صالحة';
+    }
+    return 'حدث خطا ما يرجي المحاوله لاحقا';
   }
 }
 

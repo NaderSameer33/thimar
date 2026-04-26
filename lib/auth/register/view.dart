@@ -81,10 +81,10 @@ class _RegisterViewState extends State<RegisterView> {
                         prefixIcon: 'phone.png',
                         hintText: 'رقم الجوال',
                       ),
-                      AppInput(
+                       AppInput(
+                        controller: cubit.cityController,
                         validator: AppValdator.countryValditor,
                         bottomSpacing: 16.h,
-
                         prefixIcon: 'country.png',
                         hintText: 'المدينة',
                       ),
@@ -107,7 +107,7 @@ class _RegisterViewState extends State<RegisterView> {
                           if (state is SuccessState) {
                             showMsg(state.succesMessage);
                             goTo(
-                              OtpVeiw(
+                              OtpView(
                                 phoneNumber: cubit.phoneController.text.trim(),
                               ),
                             );

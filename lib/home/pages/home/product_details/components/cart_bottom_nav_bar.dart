@@ -69,12 +69,28 @@ class CartBottomNavBar extends StatelessWidget {
               ),
             ],
           ),
-          Text(
-            '${productModel.price * count} ر.س ',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15.sp,
-              fontWeight: FontWeight.bold,
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (child, animation) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0.0, -0.5),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: FadeTransition(
+                  opacity: animation,
+                  child: child,
+                ),
+              );
+            },
+            child: Text(
+              '${(productModel.price * count).toStringAsFixed(2)} ر.س',
+              key: ValueKey<int>(count),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],

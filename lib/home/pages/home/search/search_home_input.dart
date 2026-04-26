@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:thimar/core/ui/app_input.dart';
+import 'cubit/search_cubit.dart';
 
 class SearchHomeInput extends StatefulWidget {
   const SearchHomeInput({super.key});
@@ -13,6 +15,12 @@ class _SearchHomeInputState extends State<SearchHomeInput> {
   final controller = TextEditingController();
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AppInput(
       controller: controller,
@@ -20,6 +28,9 @@ class _SearchHomeInputState extends State<SearchHomeInput> {
       prefixIcon: 'search.svg',
       isSearch: true,
       bottomSpacing: 24.h,
+      onChanged: (value) {
+        context.read<SearchCubit>().onSearchChanged(keyword: value);
+      },
     );
   }
 }

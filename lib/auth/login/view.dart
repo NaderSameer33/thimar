@@ -104,9 +104,9 @@ class _LoginViewState extends State<LoginView> {
                         listener: (context, state) {
                           if (state is LoginSuccessState) {
                             showMsg(state.succesMessage);
-                            goTo(HomeView(), canPop: false);
+                            goTo(HomeView(), canPop: false, delayedSeconds: 1);
                           } else if (state is LoginFailureState) {
-                            showMsg(state.errorMessage);
+                            showMsg(state.errorMessage, isError: true);
                           }
                         },
                         builder: (context, state) {

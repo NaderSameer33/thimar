@@ -11,6 +11,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   final passwordController = TextEditingController();
   final confirmPasswrodController = TextEditingController();
   final phoneController = TextEditingController();
+  final cityController = TextEditingController();
 
   Future<void> clientRegister() async {
     emit(LoadingState());
@@ -19,21 +20,35 @@ class RegisterCubit extends Cubit<RegisterState> {
       'password': passwordController.text.trim(),
       'password_confirmation': confirmPasswrodController.text.trim(),
       'phone': phoneController.text.trim(),
+      'gender': 'female', // Default from Postman screenshot
+      'lat': 250.0515,     // From Postman screenshot
+      'lng': 290.45,      // From Postman screenshot
     });
-    try {
-      final response = await DioHelper.sendData(
-        endPoint: 'client_register',
-        data: formData,
-      );
+
+    final response = await DioHelper.sendData(
+      endPoint: 'client_register',
+      data: formData,
+    );
+
+    if (response.isSucces) {
       emit(
-        SuccessState(succesMessage: response.succesMessage ?? ''),
+        SuccessState(succesMessage: response.succesMessage ?? 'تم انشاء الحساب بنجاح'),
       );
-    } on DioException catch (exception) {
+    } else {
       emit(
         FaliureState(
-          errorMessage: exception.response!.data['message'],
+          errorMessage: response.exception ?? 'حدث خطا ما يرجي المحاوله لاحقا',
         ),
       );
     }
+  }
+  @override
+  Future<void> close() {
+    nameController.dispose();
+    passwordController.dispose();
+    confirmPasswrodController.dispose();
+    phoneController.dispose();
+    cityController.dispose();
+    return super.close();
   }
 }

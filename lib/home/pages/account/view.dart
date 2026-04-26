@@ -11,6 +11,8 @@ import 'package:thimar/home/pages/account/contact_us.dart';
 import 'package:thimar/home/pages/account/issues.dart';
 import 'package:thimar/home/pages/account/privacy.dart';
 import 'package:thimar/home/pages/account/question.dart';
+import 'package:thimar/home/pages/account/cubit/logout_cubit.dart';
+import 'package:thimar/home/pages/account/cubit/logout_state.dart';
 import 'package:thimar/home/pages/account/user_info/cubit/user_info_cubit.dart';
 import 'package:thimar/home/pages/account/user_info/cubit/user_info_state.dart';
 import 'package:thimar/home/pages/account/user_info/view.dart';
@@ -36,11 +38,13 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<UserInfoCubit>.value(
-      value: _userInfoCubit,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<UserInfoCubit>.value(value: _userInfoCubit),
+        BlocProvider<LogoutCubit>(create: (context) => LogoutCubit()),
+      ],
       child: WillPopScope(
         onWillPop: () async {
-          // تحديث البيانات عند الرجوع
           _userInfoCubit.getUserInfo();
           return true;
         },
@@ -58,6 +62,7 @@ class _AccountPageState extends State<AccountPage> {
       ),
     );
   }
+
 
   @override
   void dispose() {

@@ -158,8 +158,8 @@ class _UserInfoViewState extends State<UserInfoView> {
                             showMsg(state.succesMessage);
                             Future.delayed(Duration(seconds: 1), () {
                               Navigator.pop(context);
-                            });
-                          } else if (state is EditInfoFailureState) {
+                            }); 
+                          } else if(state is EditInfoFailureState) {
                             showMsg(state.errorMessage);
                           }
                         },

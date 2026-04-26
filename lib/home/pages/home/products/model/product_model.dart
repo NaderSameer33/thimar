@@ -1,9 +1,14 @@
 class ProductData {
   late final List<ProductModel> list;
   ProductData.fromJson(Map<String, dynamic> jsonData) {
-    list = List.from(
-      jsonData['data'] ?? {},
-    ).map((item) => ProductModel.fromJson(item)).toList();
+    // 'data' can be a List OR a Map depending on the endpoint.
+    // Only use it when it's actually a List; otherwise try 'search_result'.
+    dynamic raw = jsonData['data'];
+    if (raw is! List) raw = jsonData['search_result'];
+    if (raw is! List) raw = [];
+    list = List<dynamic>.from(raw)
+        .map((item) => ProductModel.fromJson(item))
+        .toList();
   }
 }
 

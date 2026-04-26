@@ -17,19 +17,22 @@ class OtpCubit extends Cubit<OtpState> {
       'device_token': 'test',
       'type': 'ios',
     });
-    try {
-      final response = await DioHelper.sendData(
-        endPoint: 'verify',
-        data: formData,
-      );
+    final response = await DioHelper.sendData(
+      endPoint: 'verify',
+      data: formData,
+    );
+
+    if (response.isSucces) {
       emit(
         OtpSuccessState(
-          succesMessage: response.succesMessage ?? 'تم تاكيد حسابك ينجاح',
+          succesMessage: response.succesMessage ?? 'تم تاكيد حسابك بنجاح',
         ),
       );
-    } on DioException catch (exception) {
+    } else {
       emit(
-        OtpFailureState(failureMessage: exception.response!.data['message']),
+        OtpFailureState(
+          failureMessage: response.exception ?? 'حدث خطا ما يرجي المحاوله لاحقا',
+        ),
       );
     }
   }
